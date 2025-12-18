@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 import { toast } from "sonner";
 
@@ -83,7 +83,7 @@ const Signup = () => {
 
     useEffect(() => {
       if (isLoggedIn) {
-        navigate("/dashboard")
+        navigate("/")
       }
     }, [isLoggedIn])
   return (
@@ -146,7 +146,8 @@ const Signup = () => {
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="flex-col gap-2">
+        <CardFooter className="flex justify-center gap-1">
+          Got an account? <Link to={"/login"} className="underline">Login</ Link>
         </CardFooter>
       </Card>
     </div>

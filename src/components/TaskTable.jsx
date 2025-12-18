@@ -131,6 +131,7 @@ export function TaskTable({ data, setData, filterTask }) {
 
               {["low", "medium", "high"]?.map((elem, i) => (
                 <DropdownMenuCheckboxItem
+                className="capitalize"
                   key={i}
                   checked={selectedFilterByPriority === elem}
                   onCheckedChange={(checked) => {
@@ -151,6 +152,7 @@ export function TaskTable({ data, setData, filterTask }) {
 
               {["pending", "completed"]?.map((elem, i) => (
                 <DropdownMenuCheckboxItem
+                className="capitalize"
                   key={i}
                   checked={selectedFilterByStatus === elem}
                   onCheckedChange={(checked) => {
