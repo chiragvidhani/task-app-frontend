@@ -30,6 +30,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {Textarea} from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -45,12 +46,12 @@ import { useEffect } from "react";
 import taskStore from "../store/taskStore";
 
 const formSchema = z.object({
-  title: z.string().min(2, {
+  title: z.string().min(1, {
     message: "Title is required",
   }),
-  description: z.string().min(2, {
+  description: z.string().min(1, {
     message: "Description is required",
-  }),
+  }).max(100, "Maximum 100 characters"),
   priority: z.enum(["low", "medium", "high"]).optional(),
   status: z.enum(["pending", "completed"]).optional(),
   dueDate: z.date().optional().nullable(),
@@ -186,9 +187,10 @@ export function AddTask({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input
+                    <Textarea
                       type="text"
                       placeholder="Enter description"
+                      className="max-h-12"
                       {...field}
                     />
                   </FormControl>
@@ -208,13 +210,13 @@ export function AddTask({
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className={"w-full"}>
+                      <SelectTrigger className={"w-full capitalize"}>
                         <SelectValue placeholder="Select Task Priority" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="w-full p-0 max-h-40 overflow-auto">
                       {["low", "medium", "high"].map((data, i) => (
-                        <SelectItem value={data} key={i}>
+                        <SelectItem className="capitalize" value={data} key={i}>
                           {data}
                         </SelectItem>
                       ))}
@@ -236,13 +238,13 @@ export function AddTask({
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className={"w-full"}>
+                      <SelectTrigger className={"w-full capitalize"}>
                         <SelectValue placeholder="Select Task Status" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="w-full p-0 max-h-40 overflow-auto">
                       {["pending", "completed"].map((data, i) => (
-                        <SelectItem value={data} key={i}>
+                        <SelectItem className="capitalize" value={data} key={i}>
                           {data}
                         </SelectItem>
                       ))}

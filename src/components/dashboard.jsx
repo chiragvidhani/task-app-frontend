@@ -12,6 +12,7 @@ const Dashboard = () => {
   const { accessToken } = useAuthStore((state) => state.accessToken);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const { taskData, setTaskData } = taskStore();
+  const logout = useAuthStore((state) => state.logout);
 
 //   const [taskData, setTaskData] = useState([]);
 
@@ -58,6 +59,7 @@ const Dashboard = () => {
       })
       .catch((error) => {
         console.log(error);
+        logout();
       });
   };
 
@@ -93,7 +95,7 @@ const Dashboard = () => {
       <h1 className="text-3xl font-bold py-3">Hey, {profileData?.fullName}</h1>
       <h1 className="text-2xl font-semibold">Welcome</h1>
       <div className="flex h-full items-center justify-center flex-col">
-        <div className="w-1/2">
+        <div className="w-3/4">
           <TaskTable
             data={taskData}
             setTaskData={()=> {setTaskData}}

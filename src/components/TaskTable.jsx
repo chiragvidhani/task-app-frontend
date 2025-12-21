@@ -183,32 +183,44 @@ export function TaskTable({ data, setData, filterTask }) {
               <TableHead className="text-center">Priority</TableHead>
               <TableHead className="text-center">Due Date</TableHead>
               <TableHead className="text-center">Status</TableHead>
+              <TableHead className="text-center">Created on</TableHead>
+              <TableHead className="text-center">Last Updated</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {taskData?.taskList?.map((invoice, i) => (
+            {taskData?.taskList?.map((task, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-left">{i + 1}</TableCell>
-                <TableCell className="font-medium">{invoice.title}</TableCell>
+                <TableCell className="font-medium">{task.title}</TableCell>
                 <TableCell className="font-medium">
-                  {invoice.description}
+                  {task.description}
                 </TableCell>
-                <TableCell className="capitalize">{invoice.priority}</TableCell>
+                <TableCell className="capitalize">{task.priority}</TableCell>
                 <TableCell>
-                  {invoice.dueDate
-                    ? format(new Date(invoice.dueDate), "PPP")
+                  {task.dueDate
+                    ? format(new Date(task.dueDate), "PPP")
                     : "-"}
                 </TableCell>
                 <TableCell className="text-center capitalize">
-                  {invoice.status}
+                  {task.status}
+                </TableCell>
+                <TableCell>
+                  {task.createdAt
+                    ? format(new Date(task.createdAt), "PPP")
+                    : "-"}
+                </TableCell>
+                                <TableCell>
+                  {task.updatedAt
+                    ? format(new Date(task.updatedAt), "PPP")
+                    : "-"}
                 </TableCell>
                 <TableCell className="text-right capitalize flex gap-1">
                   <Button
                     className="size-8"
                     onClick={() => {
                       setMode("edit"),
-                        setEditData(invoice),
+                        setEditData(task),
                         setOpenAddTaskModal(true);
                       setTitle("Edit Task");
                       setButtonName("Save");
@@ -218,7 +230,7 @@ export function TaskTable({ data, setData, filterTask }) {
                   </Button>
                   <Button
                     className="size-8 bg-red-700 hover:bg-red-600"
-                    onClick={() => {setOpenDeleteModal(true), setSelectedTask(invoice._id)}}
+                    onClick={() => {setOpenDeleteModal(true), setSelectedTask(task._id)}}
                   >
                     <Trash className="size-3" />
                   </Button>
@@ -226,11 +238,12 @@ export function TaskTable({ data, setData, filterTask }) {
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <TableRow className="w-full">
+          <TableFooter className="">
+            <TableRow className="">
               <TableCell colSpan={3}>Total Tasks</TableCell>
-              <TableCell className="text-right">{taskData?.count}</TableCell>
-              <div className="w-full flex gap-2">
+              <TableCell className="text-left">{taskData?.count}</TableCell>
+              <TableCell colSpan={3}>
+              <div className="flex gap-2 justify-end">
                 <Button
                   disabled={page <= 1}
                   onClick={() => {
@@ -246,6 +259,7 @@ export function TaskTable({ data, setData, filterTask }) {
                   Next
                 </Button>
               </div>
+              </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
