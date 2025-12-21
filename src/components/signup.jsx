@@ -36,28 +36,28 @@ const formSchema = z.object({
   }),
   password: z.string().min(6, {
     message: "Password should be atleast 6 characters",
-  })
+  }),
 });
 
 const Signup = () => {
-   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
       email: "",
-      password: ""
+      password: "",
     },
   });
 
-  const handleSubmit = async(values) => {
+  const handleSubmit = async (values) => {
     let payload = {
       fullName: values.fullName,
       email: values.email,
-      password: values.password
-    }
-      
+      password: values.password,
+    };
+
     let config = {
       method: "post",
       maxBodyLength: Infinity,
@@ -71,21 +71,28 @@ const Signup = () => {
       .then((response) => {
         console.log(response.data);
         if (response.data.success) {
-          toast.success("User registered successfully");
+          toast.success("User registered successfully", {
+            style: { background: "green", color: "white" },
+          });
           navigate("/login");
         }
       })
       .catch((error) => {
         console.log(error);
-         toast.error("Error")
+        toast.error(error.response.data.data, {
+          style: {
+            background: "red",
+            color: "white",
+          },
+        });
       });
   };
 
-    useEffect(() => {
-      if (isLoggedIn) {
-        navigate("/")
-      }
-    }, [isLoggedIn])
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
   return (
     <div className="flex h-screen items-center justify-center">
       <Card className="w-full max-w-sm">
@@ -100,7 +107,10 @@ const Signup = () => {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-8"
+            >
               <FormField
                 control={form.control}
                 name="fullName"
@@ -108,7 +118,11 @@ const Signup = () => {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter your name" {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Enter your name"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -121,7 +135,11 @@ const Signup = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="Enter your email" {...field} />
+                      <Input
+                        type="email"
+                        placeholder="Enter your email"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -134,20 +152,27 @@ const Signup = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Enter your password" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="Enter your password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-          <Button type="submit" className="w-full">
-            Register
-          </Button>
+              <Button type="submit" className="w-full">
+                Register
+              </Button>
             </form>
           </Form>
         </CardContent>
         <CardFooter className="flex justify-center gap-1">
-          Got an account? <Link to={"/login"} className="underline">Login</ Link>
+          Got an account?{" "}
+          <Link to={"/login"} className="underline">
+            Login
+          </Link>
         </CardFooter>
       </Card>
     </div>

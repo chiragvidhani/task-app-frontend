@@ -30,8 +30,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {Textarea} from "@/components/ui/textarea"
-import { toast } from "sonner"
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -49,9 +49,12 @@ const formSchema = z.object({
   title: z.string().min(1, {
     message: "Title is required",
   }),
-  description: z.string().min(1, {
-    message: "Description is required",
-  }).max(100, "Maximum 100 characters"),
+  description: z
+    .string()
+    .min(1, {
+      message: "Description is required",
+    })
+    .max(100, "Maximum 100 characters"),
   priority: z.enum(["low", "medium", "high"]).optional(),
   status: z.enum(["pending", "completed"]).optional(),
   dueDate: z.date().optional().nullable(),
@@ -72,7 +75,7 @@ export function AddTask({
   setButtonName,
   mode,
   setMode,
-  filterTask
+  filterTask,
 }) {
   const { accessToken } = useAuthStore((state) => state.accessToken);
   const { taskData, setTaskData } = taskStore();
@@ -118,12 +121,20 @@ export function AddTask({
         console.log(response.data.data);
         form.reset();
         setOpenAddTaskModal(false);
-        filterTask()
-        toast.success(`Task ${mode === "edit" ? "edited" : "added"} successfully`)
+        filterTask();
+        toast.success(
+          `Task ${mode === "edit" ? "edited" : "added"} successfully`,
+          { style: { background: "green", color: "white" } }
+        );
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Error")
+        toast.error(error.response.data.data, {
+          style: {
+            background: "red",
+            color: "white",
+          },
+        });
       });
   };
 

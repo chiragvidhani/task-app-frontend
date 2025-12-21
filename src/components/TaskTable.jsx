@@ -29,7 +29,7 @@ import { CommonDeleteModal } from "./DeleteModal";
 import { toast } from "sonner";
 
 export function TaskTable({ data, setData, filterTask }) {
-  const {accessToken} = useAuthStore((state) => state.accessToken);
+  const { accessToken } = useAuthStore((state) => state.accessToken);
   const { taskData } = taskStore();
   const [selectedFilterByPriority, setSelectedFilterByPriority] =
     useState(null);
@@ -45,14 +45,16 @@ export function TaskTable({ data, setData, filterTask }) {
   let [page, setPage] = useState(1);
 
   const handleDelete = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       let config = {
         method: "delete",
         maxBodyLength: Infinity,
-        url: `${import.meta.env.VITE_API_URL}/user/deleteTask?taskID=${selectedTask}`,
+        url: `${
+          import.meta.env.VITE_API_URL
+        }/user/deleteTask?taskID=${selectedTask}`,
         headers: {
-          Authorization: accessToken
+          Authorization: accessToken,
         },
       };
 
@@ -62,19 +64,20 @@ export function TaskTable({ data, setData, filterTask }) {
           console.log(response.data.data);
           if (response.data.success) {
             setLoading(false);
-            setOpenDeleteModal(false)
+            setOpenDeleteModal(false);
             filterTask();
-            setSelectedTask("")
-            toast.success("Task deleted successfully")
+            setSelectedTask("");
+            toast.success("Task deleted successfully", {
+              style: { background: "green", color: "white" },
+            });
           }
         })
-        .catch((error) => {
-          console.log(error);
-           toast.error("Error")
-        });
     } catch (error) {
       setLoading(false);
-      console.error(error);
+      console.log(error);
+          toast.error(error.response.data.data, {
+            style: { background: "red", color: "white" },
+          });
     }
   };
 
@@ -131,7 +134,7 @@ export function TaskTable({ data, setData, filterTask }) {
 
               {["low", "medium", "high"]?.map((elem, i) => (
                 <DropdownMenuCheckboxItem
-                className="capitalize"
+                  className="capitalize"
                   key={i}
                   checked={selectedFilterByPriority === elem}
                   onCheckedChange={(checked) => {
@@ -152,7 +155,7 @@ export function TaskTable({ data, setData, filterTask }) {
 
               {["pending", "completed"]?.map((elem, i) => (
                 <DropdownMenuCheckboxItem
-                className="capitalize"
+                  className="capitalize"
                   key={i}
                   checked={selectedFilterByStatus === elem}
                   onCheckedChange={(checked) => {
@@ -198,9 +201,7 @@ export function TaskTable({ data, setData, filterTask }) {
                 </TableCell>
                 <TableCell className="capitalize">{task.priority}</TableCell>
                 <TableCell>
-                  {task.dueDate
-                    ? format(new Date(task.dueDate), "PPP")
-                    : "-"}
+                  {task.dueDate ? format(new Date(task.dueDate), "PPP") : "-"}
                 </TableCell>
                 <TableCell className="text-center capitalize">
                   {task.status}
@@ -210,7 +211,7 @@ export function TaskTable({ data, setData, filterTask }) {
                     ? format(new Date(task.createdAt), "PPP")
                     : "-"}
                 </TableCell>
-                                <TableCell>
+                <TableCell>
                   {task.updatedAt
                     ? format(new Date(task.updatedAt), "PPP")
                     : "-"}
@@ -230,7 +231,9 @@ export function TaskTable({ data, setData, filterTask }) {
                   </Button>
                   <Button
                     className="size-8 bg-red-700 hover:bg-red-600"
-                    onClick={() => {setOpenDeleteModal(true), setSelectedTask(task._id)}}
+                    onClick={() => {
+                      setOpenDeleteModal(true), setSelectedTask(task._id);
+                    }}
                   >
                     <Trash className="size-3" />
                   </Button>
@@ -243,33 +246,34 @@ export function TaskTable({ data, setData, filterTask }) {
               <TableCell colSpan={3}>Total Tasks</TableCell>
               <TableCell className="text-left">{taskData?.count}</TableCell>
               <TableCell colSpan={3}>
-              <div className="flex gap-2 justify-end">
-                <Button
-                  disabled={page <= 1}
-                  onClick={() => {
-                    setPage(--page);
-                  }}
-                >
-                  Previous
-                </Button>
-                <Button
-                  disabled={page >= Math.ceil(taskData?.count / 5)}
-                  onClick={() => setPage((prev) => prev + 1)}
-                >
-                  Next
-                </Button>
-              </div>
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    disabled={page <= 1}
+                    onClick={() => {
+                      setPage(--page);
+                    }}
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    disabled={page >= Math.ceil(taskData?.count / 5)}
+                    onClick={() => setPage((prev) => prev + 1)}
+                  >
+                    Next
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
-        <CommonDeleteModal 
-        setDelModalOpen={setOpenDeleteModal}
-        delModalOpen={openDeleteModal}
-        handleEvent={handleDelete}
-        dialogTitle={"Delete Task"} 
-        dialogDescription={"Are you sure you want to delete this task?"}
-        loading={loading} />
+        <CommonDeleteModal
+          setDelModalOpen={setOpenDeleteModal}
+          delModalOpen={openDeleteModal}
+          handleEvent={handleDelete}
+          dialogTitle={"Delete Task"}
+          dialogDescription={"Are you sure you want to delete this task?"}
+          loading={loading}
+        />
       </div>
     </div>
   );
